@@ -732,13 +732,13 @@
     <header class="fixed top-0 w-full z-50 glass-effect">
         <nav class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4 space-x-reverse">
+                <a href="#hero" class="flex items-center space-x-4 space-x-reverse hover:scale-105 transition-transform duration-300">
                     <div class="custom-logo"></div>
                     <div>
                         <h1 class="text-2xl font-bold gradient-text-green">iCore Studio</h1>
                         <p class="text-sm text-gray-400">استوديو التصميم الإبداعي</p>
                     </div>
-                </div>
+                </a>
                 <div class="hidden md:flex space-x-8 space-x-reverse items-center">
                     <a href="#hero" class="hover:text-green-400 transition-colors duration-300">الرئيسية</a>
                     <a href="#about" class="hover:text-green-400 transition-colors duration-300">من نحن</a>
@@ -750,9 +750,64 @@
                         <i class="fas fa-sign-in-alt mr-2"></i>دخول
                     </button>
                 </div>
-                <button class="md:hidden text-white">
-                    <i class="fas fa-bars text-xl"></i>
+                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-xl" id="mobileMenuIcon"></i>
                 </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-95 backdrop-blur-lg transform translate-x-full transition-transform duration-300 z-50">
+                <div class="flex flex-col h-full">
+                    <div class="flex items-center justify-between p-6 border-b border-gray-800">
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            <div class="custom-logo" style="width: 40px; height: 40px; font-size: 1rem;"></div>
+                            <div>
+                                <h1 class="text-lg font-bold gradient-text-green">iCore Studio</h1>
+                                <p class="text-xs text-gray-400">استوديو التصميم الإبداعي</p>
+                            </div>
+                        </div>
+                        <button onclick="toggleMobileMenu()" class="text-white">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex-1 overflow-y-auto">
+                        <nav class="p-6">
+                            <ul class="space-y-6">
+                                <li><a href="#hero" onclick="toggleMobileMenu()" class="block text-lg text-white hover:text-green-400 transition-colors duration-300 py-2"><i class="fas fa-home mr-3"></i>الرئيسية</a></li>
+                                <li><a href="#about" onclick="toggleMobileMenu()" class="block text-lg text-white hover:text-green-400 transition-colors duration-300 py-2"><i class="fas fa-info-circle mr-3"></i>من نحن</a></li>
+                                <li><a href="#services" onclick="toggleMobileMenu()" class="block text-lg text-white hover:text-green-400 transition-colors duration-300 py-2"><i class="fas fa-cogs mr-3"></i>خدماتنا</a></li>
+                                <li><a href="#portfolio" onclick="toggleMobileMenu()" class="block text-lg text-white hover:text-green-400 transition-colors duration-300 py-2"><i class="fas fa-briefcase mr-3"></i>أعمالنا</a></li>
+                                <li><a href="#team" onclick="toggleMobileMenu()" class="block text-lg text-white hover:text-green-400 transition-colors duration-300 py-2"><i class="fas fa-users mr-3"></i>فريقنا</a></li>
+                                <li><a href="#contact" onclick="toggleMobileMenu()" class="block text-lg text-white hover:text-green-400 transition-colors duration-300 py-2"><i class="fas fa-envelope mr-3"></i>تواصل معنا</a></li>
+                            </ul>
+                        </nav>
+                        
+                        <div class="p-6 border-t border-gray-800">
+                            <button onclick="openLoginModal(); toggleMobileMenu();" class="w-full gradient-green text-black px-4 py-3 rounded-full font-bold hover:scale-105 transition-transform">
+                                <i class="fas fa-sign-in-alt mr-2"></i>دخول
+                            </button>
+                        </div>
+                        
+                        <div class="p-6">
+                            <h4 class="text-lg font-bold mb-4 gradient-text-green">تابعنا على</h4>
+                            <div class="flex space-x-4 space-x-reverse">
+                                <a href="#" class="w-12 h-12 gradient-green rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                    <i class="fab fa-instagram text-black"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 gradient-green rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                    <i class="fab fa-twitter text-black"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 gradient-green rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                    <i class="fab fa-behance text-black"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 gradient-green rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                    <i class="fab fa-dribbble text-black"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
@@ -1244,13 +1299,13 @@
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-4 gap-8">
                 <div>
-                    <div class="flex items-center space-x-4 space-x-reverse mb-4">
+                    <a href="#hero" class="flex items-center space-x-4 space-x-reverse mb-4 hover:scale-105 transition-transform duration-300">
                         <div class="custom-logo"></div>
                         <div>
                             <h3 class="text-xl font-bold gradient-text-green">iCore Studio</h3>
                             <p class="text-sm text-gray-400">استوديو التصميم الإبداعي</p>
                         </div>
-                    </div>
+                    </a>
                     <p class="text-gray-400">
                         فريق سعودي متخصص في التصميم الجرافيكي والإبداع البصري
                     </p>
@@ -1680,6 +1735,115 @@
                 closeLoginModal();
             }
         });
+
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+            
+            if (mobileMenu.style.transform === 'translateX(0px)' || mobileMenu.classList.contains('menu-open')) {
+                // Close menu
+                mobileMenu.style.transform = 'translateX(100%)';
+                mobileMenu.classList.remove('menu-open');
+                document.body.style.overflow = 'auto';
+                mobileMenuIcon.className = 'fas fa-bars text-xl';
+            } else {
+                // Open menu
+                mobileMenu.style.transform = 'translateX(0px)';
+                mobileMenu.classList.add('menu-open');
+                document.body.style.overflow = 'hidden';
+                mobileMenuIcon.className = 'fas fa-times text-xl';
+            }
+        }
+
+        // Close mobile menu when clicking on overlay
+        document.getElementById('mobileMenu').addEventListener('click', function(e) {
+            if (e.target === this) {
+                toggleMobileMenu();
+            }
+        });
+
+        // Close mobile menu on window resize if open
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+                
+                mobileMenu.style.transform = 'translateX(100%)';
+                mobileMenu.classList.remove('menu-open');
+                document.body.style.overflow = 'auto';
+                mobileMenuIcon.className = 'fas fa-bars text-xl';
+            }
+        });
+
+        // Keyboard navigation support
+        document.addEventListener('keydown', function(e) {
+            // Close modals with Escape key
+            if (e.key === 'Escape') {
+                // Close mobile menu
+                const mobileMenu = document.getElementById('mobileMenu');
+                if (mobileMenu.classList.contains('menu-open')) {
+                    toggleMobileMenu();
+                }
+                
+                // Close portfolio modal
+                const portfolioModal = document.getElementById('portfolioModal');
+                if (portfolioModal.classList.contains('active')) {
+                    closePortfolioModal();
+                }
+                
+                // Close fullscreen image
+                const fullscreenImage = document.getElementById('fullscreenImage');
+                if (fullscreenImage.classList.contains('active')) {
+                    closeFullscreen();
+                }
+                
+                // Close login modal
+                const loginModal = document.getElementById('loginModal');
+                if (loginModal.classList.contains('active')) {
+                    closeLoginModal();
+                }
+            }
+        });
+
+        // Add loading animation to buttons
+        document.querySelectorAll('.submit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.type !== 'submit') return;
+                
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>جاري الإرسال...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                }, 2000);
+            });
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.service-card, .portfolio-item, .team-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a94ff986f558fa',t:'MTc1NDQyODU1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a9579bd7fa78b9',t:'MTc1NDQyODg2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
