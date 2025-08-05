@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iCore Studio - استوديو التصميم الإبداعي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        :root {
+            --primary-green: #00ff88;
+            --dark-green: #00cc6a;
+            --light-green: #33ff99;
+            --bg-dark: #121212;
+            --bg-darker: #0a0a0a;
+            --bg-lighter: #1a1a1a;
+            --text-light: #ffffff;
+            --text-gray: #cccccc;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+        
+        .gradient-green {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+        }
+        
+        .gradient-text-green {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            background: rgba(0, 255, 136, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        
+        .hover-glow {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-glow:hover {
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+            transform: translateY(-5px);
+        }
+        
+        .floating-animation {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 1s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 1s ease-out;
+        }
+        
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .pulse-green {
+            animation: pulseGreen 2s infinite;
+        }
+        
+        @keyframes pulseGreen {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.8); }
+        }
+        
+        .typing-effect {
+            overflow: hidden;
+            border-right: 3px solid var(--primary-green);
+            white-space: nowrap;
+            animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--primary-green); }
+        }
+        
+        .custom-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary-green), var(--light-green));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+        
+        .custom-logo::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--bg-dark);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .custom-logo::after {
+            content: 'iC';
+            position: absolute;
+            color: var(--primary-green);
+            font-weight: bold;
+            font-size: 16px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-green), transparent);
+            margin: 50px 0;
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .portfolio-item {
+            background: var(--bg-lighter);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .portfolio-item:hover {
+            border-color: var(--primary-green);
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.3);
+        }
+        
+        .portfolio-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--bg-dark);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .portfolio-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .portfolio-item:hover .portfolio-image::before {
+            left: 100%;
+        }
+        
+        .portfolio-info {
+            padding: 25px;
+        }
+        
+        .portfolio-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+        
+        .portfolio-description {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: var(--bg-lighter);
+            border-radius: 20px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+            border: 2px solid var(--primary-green);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-green);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 10000;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: var(--light-green);
+            transform: rotate(90deg);
+        }
+        
+        .work-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+        
+        .work-item {
+            background: var(--bg-dark);
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        
+        .work-item:hover {
+            transform: scale(1.05);
+            border-color: var(--primary-green);
+        }
+        
+        .work-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, var(--primary-green), var(--dark-green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--bg-dark);
+        }
+        
+        .work-title {
+            padding: 15px;
+            text-align: center;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+        
+        .fullscreen-image {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .fullscreen-image.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .fullscreen-content {
+            max-width: 90%;
+            max-height: 90%;
+            background: var(--bg-lighter);
+            border-radius: 20px;
+            border: 2px solid var(--primary-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            color: var(--primary-green);
+            position: relative;
+        }
+        
+        .fullscreen-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-green);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .fullscreen-close:hover {
+            background: var(--light-green);
+            transform: rotate(90deg);
+        }
+        
+        .team-card {
+            background: var(--bg-lighter);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .team-card:hover {
+            border-color: var(--primary-green);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
+        }
+        
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, var(--primary-green), var(--light-green));
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--bg-dark);
+            position: relative;
+        }
+        
+        .team-avatar::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-green), var(--light-green));
+            animation: avatarPulse 3s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes avatarPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+        
+        .service-card {
+            background: var(--bg-lighter);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover {
+            border-color: var(--primary-green);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
+        }
+        
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--primary-green), var(--light-green));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--bg-dark);
+            margin-bottom: 20px;
+        }
+        
+        .stats-counter {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-green);
+            animation: countUp 2s ease-out forwards;
+        }
+        
+        @keyframes countUp {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+        
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 255, 136, 0.2);
+            z-index: 1000;
+        }
+        
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+        
+        .floating-nav {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+        
+        .nav-dot {
+            display: block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0, 255, 136, 0.5);
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-dot.active {
+            background: var(--primary-green);
+            transform: scale(1.5);
+        }
+        
+        .nav-dot:hover {
+            background: var(--primary-green);
+            transform: scale(1.2);
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary-green), var(--light-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-dark);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 1.5rem;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
+        }
+        
+        .hero-bg {
+            background: radial-gradient(ellipse at center, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+            position: relative;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 255, 136, 0.1) 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, rgba(0, 255, 136, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px, 25px 25px;
+            animation: bgMove 20s linear infinite;
+        }
+        
+        @keyframes bgMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .contact-form {
+            background: var(--bg-lighter);
+            border-radius: 20px;
+            padding: 40px;
+            border: 2px solid rgba(0, 255, 136, 0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            color: var(--primary-green);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            background: var(--bg-dark);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(45deg, var(--primary-green), var(--light-green));
+            color: var(--bg-dark);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
+        }
+        
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .work-gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .floating-nav {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+        }
+        
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: loadingFade 3s ease-in-out forwards;
+        }
+        
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(0, 255, 136, 0.3);
+            border-top: 4px solid var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes loadingFade {
+            0%, 80% { opacity: 1; }
+            100% { opacity: 0; pointer-events: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-progress"></div>
+    </div>
+    
+    <!-- Floating Navigation -->
+    <div class="floating-nav">
+        <a href="#hero" class="nav-dot active"></a>
+        <a href="#about" class="nav-dot"></a>
+        <a href="#services" class="nav-dot"></a>
+        <a href="#portfolio" class="nav-dot"></a>
+        <a href="#team" class="nav-dot"></a>
+        <a href="#contact" class="nav-dot"></a>
+    </div>
+    
+    <!-- Back to Top Button -->
+    <div class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-50 glass-effect">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <div class="custom-logo"></div>
+                    <div>
+                        <h1 class="text-2xl font-bold gradient-text-green">iCore Studio</h1>
+                        <p class="text-sm text-gray-400">استوديو التصميم الإبداعي</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-8 space-x-reverse items-center">
+                    <a href="#hero" class="hover:text-green-400 transition-colors duration-300">الرئيسية</a>
+                    <a href="#about" class="hover:text-green-400 transition-colors duration-300">من نحن</a>
+                    <a href="#services" class="hover:text-green-400 transition-colors duration-300">خدماتنا</a>
+                    <a href="#portfolio" class="hover:text-green-400 transition-colors duration-300">أعمالنا</a>
+                    <a href="#team" class="hover:text-green-400 transition-colors duration-300">فريقنا</a>
+                    <a href="#contact" class="hover:text-green-400 transition-colors duration-300">تواصل معنا</a>
+                    <button onclick="openLoginModal()" class="gradient-green text-black px-4 py-2 rounded-full font-bold hover:scale-105 transition-transform">
+                        <i class="fas fa-sign-in-alt mr-2"></i>دخول
+                    </button>
+                </div>
+                <button class="md:hidden text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-screen flex items-center justify-center hero-bg relative overflow-hidden">
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <div class="floating-animation mb-8">
+                <div class="custom-logo mx-auto mb-6" style="width: 120px; height: 120px; font-size: 2rem;"></div>
+            </div>
+            <h1 class="hero-title text-6xl md:text-8xl font-bold mb-6 slide-in-left">
+                <span class="gradient-text-green">iCore Studio</span>
+            </h1>
+            <p class="hero-subtitle text-xl md:text-2xl mb-4 slide-in-right">
+                فريق سعودي متخصص في التصميم الجرافيكي والإبداع البصري
+            </p>
+            <p class="typing-effect text-lg text-gray-300 mb-8 mx-auto max-w-2xl">
+                نحول أفكارك إلى تصاميم استثنائية تترك أثراً لا يُنسى
+            </p>
+            <div class="flex flex-col md:flex-row gap-6 justify-center items-center fade-in-up">
+                <button class="submit-btn">
+                    <i class="fas fa-rocket mr-2"></i>
+                    ابدأ مشروعك معنا
+                </button>
+                <button class="submit-btn" style="background: transparent; border: 2px solid var(--primary-green); color: var(--primary-green);">
+                    <i class="fas fa-eye mr-2"></i>
+                    استكشف أعمالنا
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold mb-6 gradient-text-green">من نحن</h2>
+                <div class="section-divider"></div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    نحن فريق سعودي شغوف بالتصميم والإبداع، نجمع بين الخبرة المحلية والرؤية العالمية لتقديم تصاميم تعكس هويتك وتحقق أهدافك
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <div class="glass-effect p-8 rounded-2xl hover-glow">
+                        <div class="service-icon mb-6">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 gradient-text-green">الإبداع السعودي</h3>
+                        <p class="text-gray-300">
+                            نفخر بكوننا فريق سعودي يحمل رؤية 2030 في قلب كل تصميم، نمزج بين التراث العريق والحداثة المعاصرة
+                        </p>
+                    </div>
+                    
+                    <div class="glass-effect p-8 rounded-2xl hover-glow">
+                        <div class="service-icon mb-6">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 gradient-text-green">الجودة والتميز</h3>
+                        <p class="text-gray-300">
+                            نلتزم بأعلى معايير الجودة في كل مشروع، من التصميم الأولي حتى التسليم النهائي
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="space-y-8">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="text-center glass-effect p-6 rounded-2xl">
+                            <div class="stats-counter">500+</div>
+                            <p class="text-gray-300">مشروع مكتمل</p>
+                        </div>
+                        <div class="text-center glass-effect p-6 rounded-2xl">
+                            <div class="stats-counter">200+</div>
+                            <p class="text-gray-300">عميل سعيد</p>
+                        </div>
+                        <div class="text-center glass-effect p-6 rounded-2xl">
+                            <div class="stats-counter">5+</div>
+                            <p class="text-gray-300">سنوات خبرة</p>
+                        </div>
+                        <div class="text-center glass-effect p-6 rounded-2xl">
+                            <div class="stats-counter">24/7</div>
+                            <p class="text-gray-300">دعم متواصل</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold mb-6 gradient-text-green">خدماتنا الإبداعية</h2>
+                <div class="section-divider"></div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    نقدم مجموعة شاملة من خدمات التصميم الجرافيكي لتلبية جميع احتياجاتك الإبداعية
+                </p>
+            </div>
+            
+            <div class="portfolio-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text-green">تصميم الهوية البصرية</h3>
+                    <p class="text-gray-300 mb-6">
+                        تصميم شعارات وهويات بصرية متكاملة تعكس شخصية علامتك التجارية
+                    </p>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>تصميم الشعارات</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>دليل الهوية البصرية</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>تطبيقات الهوية</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>القرطاسية التجارية</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text-green">تصميم التطبيقات والمواقع</h3>
+                    <p class="text-gray-300 mb-6">
+                        واجهات مستخدم عصرية وتجربة مستخدم سلسة للتطبيقات والمواقع الإلكترونية
+                    </p>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>تصميم UI/UX</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>تصميم المواقع</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>تصميم التطبيقات</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>النماذج التفاعلية</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-print"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text-green">التصميم الطباعي</h3>
+                    <p class="text-gray-300 mb-6">
+                        تصاميم طباعية احترافية للكتب والمجلات والمطبوعات التسويقية
+                    </p>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>تصميم الكتب</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>المجلات والنشرات</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>البروشورات</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>الملصقات الإعلانية</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text-green">الموشن جرافيك</h3>
+                    <p class="text-gray-300 mb-6">
+                        رسوم متحركة وفيديوهات تفاعلية تجذب الانتباه وتوصل رسالتك بفعالية
+                    </p>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>الرسوم المتحركة</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>فيديوهات تسويقية</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>الإنفوجرافيك المتحرك</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>مقدمات الفيديو</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text-green">تصميم وسائل التواصل</h3>
+                    <p class="text-gray-300 mb-6">
+                        تصاميم جذابة ومتسقة لجميع منصات التواصل الاجتماعي
+                    </p>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>منشورات السوشيال ميديا</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>قوالب الستوري</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>أغلفة الصفحات</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>الإعلانات الرقمية</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text-green">تصميم التغليف</h3>
+                    <p class="text-gray-300 mb-6">
+                        تصاميم تغليف مبتكرة تجعل منتجك يتميز على الرف
+                    </p>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>تغليف المنتجات</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>الأكياس والعلب</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>الملصقات</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>التصميم ثلاثي الأبعاد</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold mb-6 gradient-text-green">معرض أعمالنا</h2>
+                <div class="section-divider"></div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    استكشف مجموعة من أفضل أعمالنا التي تعكس خبرتنا وإبداعنا في مختلف مجالات التصميم
+                </p>
+            </div>
+            
+            <div class="portfolio-grid">
+                <!-- Portfolio Item 1 - Logo Design -->
+                <div class="portfolio-item" onclick="openPortfolioModal('logos')">
+                    <div class="portfolio-image">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 class="portfolio-title">تصميم الشعارات</h3>
+                        <p class="portfolio-description">
+                            مجموعة متنوعة من الشعارات الإبداعية لمختلف الصناعات والقطاعات
+                        </p>
+                        <div class="mt-4">
+                            <span class="text-green-400 text-sm">25+ تصميم</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Item 2 - Branding -->
+                <div class="portfolio-item" onclick="openPortfolioModal('branding')">
+                    <div class="portfolio-image">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 class="portfolio-title">الهوية البصرية</h3>
+                        <p class="portfolio-description">
+                            هويات بصرية متكاملة تشمل الشعار والألوان والخطوط وجميع التطبيقات
+                        </p>
+                        <div class="mt-4">
+                            <span class="text-green-400 text-sm">15+ مشروع</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Item 3 - Web Design -->
+                <div class="portfolio-item" onclick="openPortfolioModal('web')">
+                    <div class="portfolio-image">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 class="portfolio-title">تصميم المواقع</h3>
+                        <p class="portfolio-description">
+                            تصاميم مواقع عصرية وسريعة الاستجابة مع تجربة مستخدم استثنائية
+                        </p>
+                        <div class="mt-4">
+                            <span class="text-green-400 text-sm">30+ موقع</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Item 4 - Print Design -->
+                <div class="portfolio-item" onclick="openPortfolioModal('print')">
+                    <div class="portfolio-image">
+                        <i class="fas fa-print"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 class="portfolio-title">التصميم الطباعي</h3>
+                        <p class="portfolio-description">
+                            مطبوعات احترافية من الكتب والمجلات إلى البروشورات والملصقات
+                        </p>
+                        <div class="mt-4">
+                            <span class="text-green-400 text-sm">40+ تصميم</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Item 5 - Social Media -->
+                <div class="portfolio-item" onclick="openPortfolioModal('social')">
+                    <div class="portfolio-image">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 class="portfolio-title">وسائل التواصل</h3>
+                        <p class="portfolio-description">
+                            تصاميم جذابة ومتسقة لجميع منصات التواصل الاجتماعي
+                        </p>
+                        <div class="mt-4">
+                            <span class="text-green-400 text-sm">100+ منشور</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Item 6 - Packaging -->
+                <div class="portfolio-item" onclick="openPortfolioModal('packaging')">
+                    <div class="portfolio-image">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 class="portfolio-title">تصميم التغليف</h3>
+                        <p class="portfolio-description">
+                            تصاميم تغليف مبتكرة تجعل منتجك يبرز ويجذب العملاء
+                        </p>
+                        <div class="mt-4">
+                            <span class="text-green-400 text-sm">20+ منتج</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold mb-6 gradient-text-green">فريق الإبداع</h2>
+                <div class="section-divider"></div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    تعرف على الفريق السعودي المبدع الذي يقف وراء كل تصميم استثنائي
+                </p>
+            </div>
+            
+            <div class="portfolio-grid">
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 gradient-text-green">iTrx | مجييد</h3>
+                    <p class="text-green-400 mb-4">المدير الإبداعي</p>
+                    <p class="text-gray-300 mb-6">
+                        خبرة 8 سنوات في التصميم الجرافيكي والهوية البصرية، متخصص في إنشاء علامات تجارية مميزة
+                    </p>
+                    <div class="flex justify-center space-x-4 space-x-reverse">
+                        <!-- رابط لينكد إن للمصمم الأول -->
+                        <a href="#" class="text-green-400 hover:text-green-300"><i class="fab fa-linkedin text-xl"></i></a>
+                        <!-- رابط بيهانس للمصمم الأول -->
+                        <a href="#" class="text-green-400 hover:text-green-300"><i class="fab fa-behance text-xl"></i></a>
+                        <!-- رابط دريبل للمصمم الأول -->
+                        <a href="#" class="text-green-400 hover:text-green-300"><i class="fab fa-dribbble text-xl"></i></a>
+                    </div>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 gradient-text-green">سعيد</h3>
+                    <p class="text-green-400 mb-4">مصمم جرافيك</p>
+                    <p class="text-gray-300 mb-6">
+                        متخصص في التصميم الجرافيكي والإبداع البصري، يحول الأفكار إلى تصاميم استثنائية
+                    </p>
+                    <div class="flex justify-center space-x-4 space-x-reverse">
+                        <!-- رابط لينكد إن للمصمم الثاني -->
+                        <a href="#" class="text-green-400 hover:text-green-300"><i class="fab fa-linkedin text-xl"></i></a>
+                        <!-- رابط بيهانس للمصمم الثاني -->
+                        <a href="#" class="text-green-400 hover:text-green-300"><i class="fab fa-behance text-xl"></i></a>
+                        <!-- رابط دريبل للمصمم الثاني -->
+                        <a href="#" class="text-green-400 hover:text-green-300"><i class="fab fa-dribbble text-xl"></i></a>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold mb-6 gradient-text-green">تواصل معنا</h2>
+                <div class="section-divider"></div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    هل لديك مشروع في ذهنك؟ دعنا نحوله إلى واقع إبداعي يفوق توقعاتك
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+                <div class="space-y-8">
+                    <div class="glass-effect p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-6 gradient-text-green">معلومات التواصل</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center space-x-4 space-x-reverse">
+                                <div class="w-12 h-12 gradient-green rounded-full flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt text-black"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white">العنوان</h4>
+                                    <p class="text-gray-300">الرياض، المملكة العربية السعودية</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4 space-x-reverse">
+                                <div class="w-12 h-12 gradient-green rounded-full flex items-center justify-center">
+                                    <i class="fas fa-phone text-black"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white">الهاتف</h4>
+                                    <p class="text-gray-300">+966 50 123 4567</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4 space-x-reverse">
+                                <div class="w-12 h-12 gradient-green rounded-full flex items-center justify-center">
+                                    <i class="fas fa-envelope text-black"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white">البريد الإلكتروني</h4>
+                                    <p class="text-gray-300">info@icorestudio.sa</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="font-bold text-white mb-4">تابعنا على</h4>
+                            <div class="flex space-x-4 space-x-reverse">
+                                <!-- رابط إنستغرام الرئيسي للاستوديو -->
+                                <a href="#" class="w-10 h-10 gradient-green rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                    <i class="fab fa-instagram text-black"></i>
+                                </a>
+                                <!-- رابط تويتر الرئيسي للاستوديو -->
+                                <a href="#" class="w-10 h-10 gradient-green rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                    <i class="fab fa-twitter text-black"></i>
+                                </a>
+                                <!-- رابط بيهانس الرئيسي للاستوديو -->
+                                <a href="#" class="w-10 h-10 gradient-green rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                    <i class="fab fa-behance text-black"></i>
+                                </a>
+                                <!-- رابط دريبل الرئيسي للاستوديو -->
+                                <a href="#" class="w-10 h-10 gradient-green rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                    <i class="fab fa-dribbble text-black"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3 class="text-2xl font-bold mb-6 gradient-text-green">أرسل لنا رسالة</h3>
+                    <form>
+                        <div class="form-group">
+                            <label class="form-label">الاسم الكامل</label>
+                            <input type="text" class="form-input" placeholder="أدخل اسمك الكامل">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">البريد الإلكتروني</label>
+                            <input type="email" class="form-input" placeholder="أدخل بريدك الإلكتروني">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">رقم الهاتف</label>
+                            <input type="tel" class="form-input" placeholder="أدخل رقم هاتفك">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">نوع المشروع</label>
+                            <select class="form-input">
+                                <option>اختر نوع المشروع</option>
+                                <option>تصميم شعار</option>
+                                <option>هوية بصرية</option>
+                                <option>تصميم موقع</option>
+                                <option>تصميم تطبيق</option>
+                                <option>تصميم طباعي</option>
+                                <option>موشن جرافيك</option>
+                                <option>أخرى</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">تفاصيل المشروع</label>
+                            <textarea class="form-input form-textarea" placeholder="أخبرنا عن مشروعك وما تحتاجه"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn w-full">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            إرسال الرسالة
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-4 space-x-reverse mb-4">
+                        <div class="custom-logo"></div>
+                        <div>
+                            <h3 class="text-xl font-bold gradient-text-green">iCore Studio</h3>
+                            <p class="text-sm text-gray-400">استوديو التصميم الإبداعي</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400">
+                        فريق سعودي متخصص في التصميم الجرافيكي والإبداع البصري
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 gradient-text-green">خدماتنا</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-green-400">تصميم الشعارات</a></li>
+                        <li><a href="#" class="hover:text-green-400">الهوية البصرية</a></li>
+                        <li><a href="#" class="hover:text-green-400">تصميم المواقع</a></li>
+                        <li><a href="#" class="hover:text-green-400">الموشن جرافيك</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 gradient-text-green">روابط سريعة</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#about" class="hover:text-green-400">من نحن</a></li>
+                        <li><a href="#portfolio" class="hover:text-green-400">أعمالنا</a></li>
+                        <li><a href="#team" class="hover:text-green-400">فريقنا</a></li>
+                        <li><a href="#contact" class="hover:text-green-400">تواصل معنا</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 gradient-text-green">تابعنا</h4>
+                    <div class="flex space-x-4 space-x-reverse">
+                        <!-- رابط إنستغرام الرئيسي للاستوديو -->
+                        <a href="#" class="w-10 h-10 gradient-green rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                            <i class="fab fa-instagram text-black"></i>
+                        </a>
+                        <!-- رابط تويتر الرئيسي للاستوديو -->
+                        <a href="#" class="w-10 h-10 gradient-green rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                            <i class="fab fa-twitter text-black"></i>
+                        </a>
+                        <!-- رابط بيهانس الرئيسي للاستوديو -->
+                        <a href="#" class="w-10 h-10 gradient-green rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                            <i class="fab fa-behance text-black"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <div class="text-center">
+                <p class="text-gray-400">
+                    © 2024 iCore Studio. جميع الحقوق محفوظة. صُنع بـ <span class="text-green-400">❤️</span> في المملكة العربية السعودية
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Portfolio Modals -->
+    <div id="portfolioModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closePortfolioModal()">×</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Image Modal -->
+    <div id="fullscreenImage" class="fullscreen-image">
+        <button class="fullscreen-close" onclick="closeFullscreen()">×</button>
+        <div id="fullscreenContent" class="fullscreen-content"></div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <button class="modal-close" onclick="closeLoginModal()">×</button>
+            <div class="p-8">
+                <div class="text-center mb-6">
+                    <div class="custom-logo mx-auto mb-4"></div>
+                    <h3 class="text-2xl font-bold gradient-text-green">تسجيل الدخول</h3>
+                    <p class="text-gray-400">ادخل بياناتك للوصول للوحة التحكم</p>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label">اسم المستخدم</label>
+                        <input type="text" id="username" class="form-input" placeholder="أدخل اسم المستخدم" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">كلمة المرور</label>
+                        <input type="password" id="password" class="form-input" placeholder="أدخل كلمة المرور" required>
+                    </div>
+                    
+                    <div id="loginError" class="text-red-400 text-sm mb-4 hidden">
+                        اسم المستخدم أو كلمة المرور غير صحيحة
+                    </div>
+                    
+                    <button type="submit" class="submit-btn w-full">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        دخول
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.querySelector('.loading-screen').style.display = 'none';
+            }, 2000);
+        });
+
+        // Scroll Progress
+        window.addEventListener('scroll', function() {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+            
+            // Back to top button
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Back to top functionality
+        document.querySelector('.back-to-top').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Floating navigation
+        document.querySelectorAll('.nav-dot').forEach(dot => {
+            dot.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+                
+                // Update active dot
+                document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Portfolio data
+        const portfolioData = {
+            logos: {
+                title: 'تصميم الشعارات',
+                description: 'مجموعة متنوعة من الشعارات الإبداعية لمختلف الصناعات',
+                works: [
+                    { title: 'شعار iCore Studio', icon: 'fas fa-code' },
+                    { title: 'شعار شركة تقنية سعودية', icon: 'fas fa-laptop-code' },
+                    { title: 'شعار مطعم الأصالة', icon: 'fas fa-utensils' },
+                    { title: 'شعار عيادة النور الطبية', icon: 'fas fa-heartbeat' },
+                    { title: 'شعار مجموعة الرياض العقارية', icon: 'fas fa-building' },
+                    { title: 'شعار بوتيك الأناقة', icon: 'fas fa-tshirt' },
+                    { title: 'شعار شركة النقل السريع', icon: 'fas fa-truck' },
+                    { title: 'شعار أكاديمية المستقبل', icon: 'fas fa-graduation-cap' },
+                    { title: 'شعار نادي الفتوة الرياضي', icon: 'fas fa-dumbbell' },
+                    { title: 'شعار متجر الإلكترونيات', icon: 'fas fa-mobile-alt' }
+                ]
+            },
+            branding: {
+                title: 'الهوية البصرية',
+                description: 'هويات بصرية متكاملة تشمل جميع عناصر العلامة التجارية',
+                works: [
+                    { title: 'هوية مقهى الأصالة السعودي', icon: 'fas fa-coffee' },
+                    { title: 'هوية شركة الاستشارات المتقدمة', icon: 'fas fa-chart-line' },
+                    { title: 'هوية متجر سوق الرياض', icon: 'fas fa-shopping-cart' },
+                    { title: 'هوية معهد التدريب التقني', icon: 'fas fa-chalkboard-teacher' },
+                    { title: 'هوية شركة رحلات الخليج', icon: 'fas fa-plane' },
+                    { title: 'هوية صالون الجمال العصري', icon: 'fas fa-cut' },
+                    { title: 'هوية مطعم البحر الأبيض', icon: 'fas fa-fish' },
+                    { title: 'هوية شركة البناء الحديث', icon: 'fas fa-hammer' }
+                ]
+            },
+            web: {
+                title: 'تصميم المواقع',
+                description: 'تصاميم مواقع عصرية وسريعة الاستجابة',
+                works: [
+                    { title: 'موقع iCore Studio الرسمي', icon: 'fas fa-desktop' },
+                    { title: 'موقع متجر الإلكترونيات', icon: 'fas fa-store' },
+                    { title: 'موقع مطعم الأصالة', icon: 'fas fa-pizza-slice' },
+                    { title: 'موقع عيادة النور الطبية', icon: 'fas fa-clinic-medical' },
+                    { title: 'موقع محفظة أعمال المصممين', icon: 'fas fa-briefcase' },
+                    { title: 'موقع مدونة التقنية', icon: 'fas fa-blog' },
+                    { title: 'موقع شركة العقارات', icon: 'fas fa-home' },
+                    { title: 'موقع الأكاديمية التعليمية', icon: 'fas fa-university' }
+                ]
+            },
+            print: {
+                title: 'التصميم الطباعي',
+                description: 'مطبوعات احترافية لجميع الاحتياجات التسويقية',
+                works: [
+                    { title: 'بروشور iCore Studio', icon: 'fas fa-file-alt' },
+                    { title: 'كتالوج منتجات الشركة', icon: 'fas fa-book' },
+                    { title: 'ملصق إعلاني للمعرض', icon: 'fas fa-image' },
+                    { title: 'بطاقات عمل المصممين', icon: 'fas fa-id-card' },
+                    { title: 'مجلة التصميم السعودي', icon: 'fas fa-newspaper' },
+                    { title: 'التقرير السنوي للشركة', icon: 'fas fa-chart-bar' },
+                    { title: 'دليل الهوية البصرية', icon: 'fas fa-palette' },
+                    { title: 'كتيب الخدمات', icon: 'fas fa-book-open' }
+                ]
+            },
+            social: {
+                title: 'وسائل التواصل الاجتماعي',
+                description: 'تصاميم جذابة لجميع منصات التواصل',
+                works: [
+                    { title: 'منشورات iCore على إنستغرام', icon: 'fab fa-instagram' },
+                    { title: 'أغلفة صفحات فيسبوك', icon: 'fab fa-facebook' },
+                    { title: 'تصاميم تويتر الاحترافية', icon: 'fab fa-twitter' },
+                    { title: 'قوالب ستوري متحركة', icon: 'fas fa-mobile-alt' },
+                    { title: 'إعلانات رقمية تفاعلية', icon: 'fas fa-ad' },
+                    { title: 'محتوى يوتيوب بصري', icon: 'fab fa-youtube' },
+                    { title: 'تصاميم لينكد إن', icon: 'fab fa-linkedin' },
+                    { title: 'محتوى سناب شات', icon: 'fab fa-snapchat' }
+                ]
+            },
+            packaging: {
+                title: 'تصميم التغليف',
+                description: 'تصاميم تغليف مبتكرة تجذب العملاء',
+                works: [
+                    { title: 'علبة منتجات غذائية سعودية', icon: 'fas fa-box' },
+                    { title: 'أكياس تسوق فاخرة', icon: 'fas fa-shopping-bag' },
+                    { title: 'علب الأدوية الطبية', icon: 'fas fa-pills' },
+                    { title: 'تغليف هدايا المناسبات', icon: 'fas fa-gift' },
+                    { title: 'علب المجوهرات الفاخرة', icon: 'fas fa-gem' },
+                    { title: 'تغليف الأجهزة الإلكترونية', icon: 'fas fa-mobile' },
+                    { title: 'علب العطور السعودية', icon: 'fas fa-spray-can' },
+                    { title: 'تغليف منتجات التجميل', icon: 'fas fa-magic' }
+                ]
+            }
+        };
+
+        // Open portfolio modal
+        function openPortfolioModal(category) {
+            const modal = document.getElementById('portfolioModal');
+            const modalContent = document.getElementById('modalContent');
+            const data = portfolioData[category];
+            
+            modalContent.innerHTML = `
+                <div class="p-8">
+                    <h2 class="text-4xl font-bold mb-4 gradient-text-green">${data.title}</h2>
+                    <p class="text-gray-300 mb-8 text-lg">${data.description}</p>
+                    <div class="work-gallery">
+                        ${data.works.map(work => `
+                            <div class="work-item" onclick="openFullscreen('${work.icon}', '${work.title}')">
+                                <div class="work-image">
+                                    <i class="${work.icon}"></i>
+                                </div>
+                                <div class="work-title">${work.title}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close portfolio modal
+        function closePortfolioModal() {
+            const modal = document.getElementById('portfolioModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Open fullscreen image
+        function openFullscreen(icon, title) {
+            const fullscreen = document.getElementById('fullscreenImage');
+            const content = document.getElementById('fullscreenContent');
+            
+            content.innerHTML = `
+                <div class="text-center">
+                    <i class="${icon}" style="font-size: 8rem; color: var(--primary-green);"></i>
+                    <h3 class="text-2xl font-bold mt-4 gradient-text-green">${title}</h3>
+                    <p class="text-gray-300 mt-2">عرض مفصل للعمل</p>
+                </div>
+            `;
+            
+            fullscreen.classList.add('active');
+        }
+
+        // Close fullscreen
+        function closeFullscreen() {
+            const fullscreen = document.getElementById('fullscreenImage');
+            fullscreen.classList.remove('active');
+        }
+
+        // Close modals when clicking outside
+        document.getElementById('portfolioModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePortfolioModal();
+            }
+        });
+
+        document.getElementById('fullscreenImage').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFullscreen();
+            }
+        });
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Create custom modal for form submission
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 400px; text-align: center;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
+                    <div class="p-8">
+                        <div class="service-icon mx-auto mb-6" style="background: var(--primary-green);">
+                            <i class="fas fa-check" style="color: var(--bg-dark);"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 gradient-text-green">تم إرسال الرسالة بنجاح!</h3>
+                        <p class="text-gray-300">شكراً لتواصلك معنا. سنقوم بالرد عليك في أقرب وقت ممكن.</p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Update active navigation dot based on scroll position
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navDots = document.querySelectorAll('.nav-dot');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navDots.forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.getAttribute('href') === '#' + current) {
+                    dot.classList.add('active');
+                }
+            });
+        });
+
+        // Login functionality
+        const users = {
+            'itrx7': 'itrx1948@',
+            'saeed': 'saeed2025'
+        };
+
+        function openLoginModal() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLoginModal() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('loginError').classList.add('hidden');
+            document.getElementById('loginForm').reset();
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+            
+            if (users[username] && users[username] === password) {
+                // Successful login
+                closeLoginModal();
+                
+                // Show success message
+                const successModal = document.createElement('div');
+                successModal.className = 'modal active';
+                successModal.innerHTML = `
+                    <div class="modal-content" style="max-width: 400px; text-align: center;">
+                        <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
+                        <div class="p-8">
+                            <div class="service-icon mx-auto mb-6" style="background: var(--primary-green);">
+                                <i class="fas fa-check" style="color: var(--bg-dark);"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 gradient-text-green">مرحباً ${username}!</h3>
+                            <p class="text-gray-300">تم تسجيل الدخول بنجاح. يمكنك الآن الوصول لجميع الميزات.</p>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(successModal);
+                document.body.style.overflow = 'hidden';
+                
+            } else {
+                // Failed login
+                errorDiv.classList.remove('hidden');
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // Close login modal when clicking outside
+        document.getElementById('loginModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLoginModal();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a94ff986f558fa',t:'MTc1NDQyODU1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
