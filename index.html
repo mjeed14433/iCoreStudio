@@ -1669,8 +1669,31 @@
 
         // Login functionality
         const users = {
+            '2025': 'itrx2025', // Founder - Full Admin Access
             'itrx7': 'itrx1948@',
             'saeed': 'saeed2025'
+        };
+
+        // User roles and permissions
+        const userRoles = {
+            '2025': {
+                role: 'founder',
+                name: 'المؤسس',
+                permissions: ['view_all', 'edit_all', 'delete_all', 'admin_panel', 'user_management', 'system_settings'],
+                color: 'gold'
+            },
+            'itrx7': {
+                role: 'admin',
+                name: 'iTrx | مجييد',
+                permissions: ['view_all', 'edit_content', 'manage_projects'],
+                color: 'var(--primary-green)'
+            },
+            'saeed': {
+                role: 'designer',
+                name: 'سعيد',
+                permissions: ['view_projects', 'edit_own'],
+                color: 'var(--primary-green)'
+            }
         };
 
         function openLoginModal() {
@@ -1699,24 +1722,61 @@
                 // Successful login
                 closeLoginModal();
                 
-                // Show success message
+                const userInfo = userRoles[username];
+                const isFounder = userInfo.role === 'founder';
+                
+                // Show success message with role info
                 const successModal = document.createElement('div');
                 successModal.className = 'modal active';
                 successModal.innerHTML = `
-                    <div class="modal-content" style="max-width: 400px; text-align: center;">
+                    <div class="modal-content" style="max-width: 500px; text-align: center;">
                         <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
                         <div class="p-8">
-                            <div class="service-icon mx-auto mb-6" style="background: var(--primary-green);">
-                                <i class="fas fa-check" style="color: var(--bg-dark);"></i>
+                            <div class="service-icon mx-auto mb-6" style="background: ${isFounder ? 'linear-gradient(45deg, #FFD700, #FFA500)' : 'var(--primary-green)'};">
+                                <i class="fas ${isFounder ? 'fa-crown' : 'fa-check'}" style="color: var(--bg-dark);"></i>
                             </div>
-                            <h3 class="text-2xl font-bold mb-4 gradient-text-green">مرحباً ${username}!</h3>
-                            <p class="text-gray-300">تم تسجيل الدخول بنجاح. يمكنك الآن الوصول لجميع الميزات.</p>
+                            <h3 class="text-2xl font-bold mb-2" style="color: ${isFounder ? '#FFD700' : 'var(--primary-green)'};">
+                                مرحباً ${userInfo.name}!
+                            </h3>
+                            <p class="text-lg mb-4" style="color: ${isFounder ? '#FFD700' : 'var(--primary-green)'};">
+                                ${isFounder ? '👑 المؤسس - صلاحيات كاملة' : userInfo.role === 'admin' ? '🔧 مدير النظام' : '🎨 مصمم'}
+                            </p>
+                            <p class="text-gray-300 mb-6">تم تسجيل الدخول بنجاح. يمكنك الآن الوصول لجميع الميزات المتاحة.</p>
+                            ${isFounder ? `
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div class="bg-gray-800 p-3 rounded-lg">
+                                        <i class="fas fa-eye text-yellow-400 mb-2"></i>
+                                        <p class="text-gray-300">عرض جميع البيانات</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-3 rounded-lg">
+                                        <i class="fas fa-edit text-yellow-400 mb-2"></i>
+                                        <p class="text-gray-300">تعديل كامل</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-3 rounded-lg">
+                                        <i class="fas fa-users text-yellow-400 mb-2"></i>
+                                        <p class="text-gray-300">إدارة المستخدمين</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-3 rounded-lg">
+                                        <i class="fas fa-cogs text-yellow-400 mb-2"></i>
+                                        <p class="text-gray-300">إعدادات النظام</p>
+                                    </div>
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
                 `;
                 
                 document.body.appendChild(successModal);
                 document.body.style.overflow = 'hidden';
+                
+                // Store current user session
+                sessionStorage.setItem('currentUser', username);
+                sessionStorage.setItem('userRole', userInfo.role);
+                
+                // Add admin controls if founder
+                if (isFounder) {
+                    addFounderControls();
+                }
                 
             } else {
                 // Failed login
@@ -1869,6 +1929,344 @@
         
         // Make LogoManager globally accessible
         window.LogoManager = LogoManager;
+
+        // Founder Admin Controls
+        function addFounderControls() {
+            // Create floating admin panel
+            const adminPanel = document.createElement('div');
+            adminPanel.id = 'founderPanel';
+            adminPanel.style.cssText = `
+                position: fixed;
+                top: 100px;
+                left: 20px;
+                background: linear-gradient(135deg, #FFD700, #FFA500);
+                border-radius: 15px;
+                padding: 15px;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+                min-width: 200px;
+                color: #000;
+                font-weight: bold;
+            `;
+            
+            adminPanel.innerHTML = `
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <i class="fas fa-crown" style="color: #000; font-size: 1.5rem;"></i>
+                    <h4 style="margin: 5px 0; color: #000;">لوحة المؤسس</h4>
+                </div>
+                
+                <div style="display: grid; gap: 8px;">
+                    <button onclick="showUserManagement()" style="background: rgba(0,0,0,0.1); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
+                        <i class="fas fa-users"></i> إدارة المستخدمين
+                    </button>
+                    
+                    <button onclick="showContentEditor()" style="background: rgba(0,0,0,0.1); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
+                        <i class="fas fa-edit"></i> تحرير المحتوى
+                    </button>
+                    
+                    <button onclick="showSystemStats()" style="background: rgba(0,0,0,0.1); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
+                        <i class="fas fa-chart-bar"></i> إحصائيات النظام
+                    </button>
+                    
+                    <button onclick="showLogoManager()" style="background: rgba(0,0,0,0.1); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
+                        <i class="fas fa-image"></i> إدارة الشعار
+                    </button>
+                    
+                    <button onclick="exportData()" style="background: rgba(0,0,0,0.1); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
+                        <i class="fas fa-download"></i> تصدير البيانات
+                    </button>
+                    
+                    <button onclick="removeFounderPanel()" style="background: rgba(255,0,0,0.2); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
+                        <i class="fas fa-times"></i> إخفاء اللوحة
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(adminPanel);
+            
+            // Make panel draggable
+            makeDraggable(adminPanel);
+        }
+
+        // Make element draggable
+        function makeDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            element.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // Admin Functions
+        function removeFounderPanel() {
+            const panel = document.getElementById('founderPanel');
+            if (panel) panel.remove();
+        }
+
+        function showUserManagement() {
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 600px;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
+                    <div class="p-8">
+                        <h2 class="text-3xl font-bold mb-6" style="color: #FFD700;">
+                            <i class="fas fa-users mr-3"></i>إدارة المستخدمين
+                        </h2>
+                        
+                        <div class="space-y-4">
+                            ${Object.keys(users).map(username => {
+                                const userInfo = userRoles[username];
+                                return `
+                                    <div class="glass-effect p-4 rounded-lg flex items-center justify-between">
+                                        <div class="flex items-center space-x-4 space-x-reverse">
+                                            <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background: ${userInfo.color === 'gold' ? 'linear-gradient(45deg, #FFD700, #FFA500)' : userInfo.color};">
+                                                <i class="fas ${userInfo.role === 'founder' ? 'fa-crown' : userInfo.role === 'admin' ? 'fa-user-tie' : 'fa-user'}" style="color: ${userInfo.color === 'gold' ? '#000' : '#fff'};"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold" style="color: ${userInfo.color === 'gold' ? '#FFD700' : 'var(--primary-green)'};">${userInfo.name}</h4>
+                                                <p class="text-gray-400">@${username} - ${userInfo.role === 'founder' ? 'المؤسس' : userInfo.role === 'admin' ? 'مدير' : 'مصمم'}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-2 space-x-reverse">
+                                            <button onclick="editUser('${username}')" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            ${username !== '2025' ? `
+                                                <button onclick="deleteUser('${username}')" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <button onclick="addNewUser()" class="mt-6 submit-btn">
+                            <i class="fas fa-plus mr-2"></i>إضافة مستخدم جديد
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showContentEditor() {
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 800px;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
+                    <div class="p-8">
+                        <h2 class="text-3xl font-bold mb-6" style="color: #FFD700;">
+                            <i class="fas fa-edit mr-3"></i>محرر المحتوى
+                        </h2>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <button onclick="editSection('hero')" class="glass-effect p-6 rounded-lg hover:border-yellow-400 transition-all">
+                                <i class="fas fa-home text-3xl mb-4" style="color: #FFD700;"></i>
+                                <h3 class="text-xl font-bold mb-2">القسم الرئيسي</h3>
+                                <p class="text-gray-400">تحرير العنوان والوصف الرئيسي</p>
+                            </button>
+                            
+                            <button onclick="editSection('about')" class="glass-effect p-6 rounded-lg hover:border-yellow-400 transition-all">
+                                <i class="fas fa-info-circle text-3xl mb-4" style="color: #FFD700;"></i>
+                                <h3 class="text-xl font-bold mb-2">قسم من نحن</h3>
+                                <p class="text-gray-400">تحرير معلومات الشركة</p>
+                            </button>
+                            
+                            <button onclick="editSection('services')" class="glass-effect p-6 rounded-lg hover:border-yellow-400 transition-all">
+                                <i class="fas fa-cogs text-3xl mb-4" style="color: #FFD700;"></i>
+                                <h3 class="text-xl font-bold mb-2">الخدمات</h3>
+                                <p class="text-gray-400">إضافة وتعديل الخدمات</p>
+                            </button>
+                            
+                            <button onclick="editSection('team')" class="glass-effect p-6 rounded-lg hover:border-yellow-400 transition-all">
+                                <i class="fas fa-users text-3xl mb-4" style="color: #FFD700;"></i>
+                                <h3 class="text-xl font-bold mb-2">الفريق</h3>
+                                <p class="text-gray-400">إدارة أعضاء الفريق</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showSystemStats() {
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 700px;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
+                    <div class="p-8">
+                        <h2 class="text-3xl font-bold mb-6" style="color: #FFD700;">
+                            <i class="fas fa-chart-bar mr-3"></i>إحصائيات النظام
+                        </h2>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="glass-effect p-6 rounded-lg text-center">
+                                <i class="fas fa-users text-4xl mb-4" style="color: #FFD700;"></i>
+                                <h3 class="text-2xl font-bold mb-2">${Object.keys(users).length}</h3>
+                                <p class="text-gray-400">إجمالي المستخدمين</p>
+                            </div>
+                            
+                            <div class="glass-effect p-6 rounded-lg text-center">
+                                <i class="fas fa-eye text-4xl mb-4" style="color: #FFD700;"></i>
+                                <h3 class="text-2xl font-bold mb-2">${Math.floor(Math.random() * 1000) + 500}</h3>
+                                <p class="text-gray-400">زيارات اليوم</p>
+                            </div>
+                            
+                            <div class="glass-effect p-6 rounded-lg text-center">
+                                <i class="fas fa-project-diagram text-4xl mb-4" style="color: #FFD700;"></i>
+                                <h3 class="text-2xl font-bold mb-2">47</h3>
+                                <p class="text-gray-400">المشاريع النشطة</p>
+                            </div>
+                            
+                            <div class="glass-effect p-6 rounded-lg text-center">
+                                <i class="fas fa-clock text-4xl mb-4" style="color: #FFD700;"></i>
+                                <h3 class="text-2xl font-bold mb-2">${new Date().toLocaleTimeString('ar-SA')}</h3>
+                                <p class="text-gray-400">آخر تحديث</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 glass-effect p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-4" style="color: #FFD700;">معلومات النظام</h3>
+                            <div class="space-y-2 text-sm">
+                                <p><strong>إصدار النظام:</strong> iCore Studio v2.0</p>
+                                <p><strong>آخر نسخة احتياطية:</strong> ${new Date().toLocaleDateString('ar-SA')}</p>
+                                <p><strong>حالة الخادم:</strong> <span class="text-green-400">متصل</span></p>
+                                <p><strong>مساحة التخزين:</strong> 2.3 GB / 10 GB</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showLogoManager() {
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 600px;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
+                    <div class="p-8">
+                        <h2 class="text-3xl font-bold mb-6" style="color: #FFD700;">
+                            <i class="fas fa-image mr-3"></i>إدارة الشعار
+                        </h2>
+                        
+                        <div class="text-center mb-6">
+                            <div class="custom-logo large mx-auto mb-4"></div>
+                            <p class="text-gray-400">الشعار الحالي</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="form-group">
+                                <label class="form-label">رابط الشعار الجديد</label>
+                                <input type="url" id="logoUrl" class="form-input" placeholder="https://example.com/logo.png">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">النص البديل (في حالة عدم وجود صورة)</label>
+                                <input type="text" id="logoText" class="form-input" placeholder="iC" value="iC">
+                            </div>
+                            
+                            <div class="flex space-x-4 space-x-reverse">
+                                <button onclick="updateLogo()" class="submit-btn flex-1">
+                                    <i class="fas fa-save mr-2"></i>تحديث الشعار
+                                </button>
+                                
+                                <button onclick="resetLogo()" class="submit-btn flex-1" style="background: #dc2626;">
+                                    <i class="fas fa-undo mr-2"></i>استعادة الافتراضي
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-yellow-900 bg-opacity-30 rounded-lg">
+                            <h4 class="font-bold mb-2" style="color: #FFD700;">تعليمات:</h4>
+                            <ul class="text-sm text-gray-300 space-y-1">
+                                <li>• استخدم رابط صورة مباشر (ينتهي بـ .png أو .jpg)</li>
+                                <li>• الحجم المثالي: 60x60 بكسل</li>
+                                <li>• سيتم تطبيق التغيير على جميع أجزاء الموقع</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateLogo() {
+            const logoUrl = document.getElementById('logoUrl').value;
+            const logoText = document.getElementById('logoText').value || 'iC';
+            
+            if (logoUrl) {
+                LogoManager.useImageLogo(logoUrl);
+            } else {
+                LogoManager.useTextLogo(logoText);
+            }
+            
+            // Show success message
+            alert('تم تحديث الشعار بنجاح!');
+        }
+
+        function resetLogo() {
+            LogoManager.resetLogo();
+            alert('تم استعادة الشعار الافتراضي!');
+        }
+
+        function exportData() {
+            const data = {
+                users: users,
+                userRoles: userRoles,
+                portfolioData: portfolioData,
+                timestamp: new Date().toISOString(),
+                version: 'iCore Studio v2.0'
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `icore-studio-backup-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            alert('تم تصدير البيانات بنجاح!');
+        }
         
         // Initialize logo on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -1898,5 +2296,5 @@
             observer.observe(el);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a9654d46ece21e',t:'MTc1NDQyOTQyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a96aec135558fa',t:'MTc1NDQyOTY1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
