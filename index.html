@@ -190,6 +190,90 @@
             font-size: 2rem;
         }
         
+        /* Dashboard Styles */
+        .dashboard-nav-btn {
+            background: var(--bg-lighter);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            color: var(--text-light);
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .dashboard-nav-btn:hover {
+            border-color: var(--primary-green);
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        .dashboard-nav-btn.active {
+            background: var(--primary-green);
+            color: var(--bg-dark);
+            border-color: var(--primary-green);
+        }
+        
+        .project-card {
+            background: var(--bg-lighter);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid rgba(0, 255, 136, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .project-card:hover {
+            border-color: var(--primary-green);
+            transform: translateY(-2px);
+        }
+        
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+        
+        .status-progress {
+            background: rgba(0, 123, 255, 0.2);
+            color: #007bff;
+        }
+        
+        .status-completed {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+        
+        .status-rejected {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        
+        .chat-message {
+            background: var(--bg-lighter);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary-green);
+        }
+        
+        .chat-message.designer {
+            border-left-color: #007bff;
+            background: rgba(0, 123, 255, 0.1);
+        }
+        
+        .chat-input {
+            background: var(--bg-lighter);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 25px;
+            padding: 15px 20px;
+            color: var(--text-light);
+            width: 100%;
+            resize: none;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+        
         .section-divider {
             height: 2px;
             background: linear-gradient(90deg, transparent, var(--primary-green), transparent);
@@ -1710,6 +1794,17 @@
             document.getElementById('loginForm').reset();
         }
 
+        // System Data
+        const systemStats = {
+            monthlyIncome: 0,
+            completedProjects: 0,
+            inProgressProjects: 0,
+            rejectedProjects: 0
+        };
+
+        const projects = [];
+        const clientMessages = {};
+
         // Handle login form submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1723,60 +1818,13 @@
                 closeLoginModal();
                 
                 const userInfo = userRoles[username];
-                const isFounder = userInfo.role === 'founder';
-                
-                // Show success message with role info
-                const successModal = document.createElement('div');
-                successModal.className = 'modal active';
-                successModal.innerHTML = `
-                    <div class="modal-content" style="max-width: 500px; text-align: center;">
-                        <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
-                        <div class="p-8">
-                            <div class="service-icon mx-auto mb-6" style="background: ${isFounder ? 'linear-gradient(45deg, #FFD700, #FFA500)' : 'var(--primary-green)'};">
-                                <i class="fas ${isFounder ? 'fa-crown' : 'fa-check'}" style="color: var(--bg-dark);"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-2" style="color: ${isFounder ? '#FFD700' : 'var(--primary-green)'};">
-                                مرحباً ${userInfo.name}!
-                            </h3>
-                            <p class="text-lg mb-4" style="color: ${isFounder ? '#FFD700' : 'var(--primary-green)'};">
-                                ${isFounder ? '👑 المؤسس - صلاحيات كاملة' : userInfo.role === 'admin' ? '🔧 مدير النظام' : '🎨 مصمم'}
-                            </p>
-                            <p class="text-gray-300 mb-6">تم تسجيل الدخول بنجاح. يمكنك الآن الوصول لجميع الميزات المتاحة.</p>
-                            ${isFounder ? `
-                                <div class="grid grid-cols-2 gap-4 text-sm">
-                                    <div class="bg-gray-800 p-3 rounded-lg">
-                                        <i class="fas fa-eye text-yellow-400 mb-2"></i>
-                                        <p class="text-gray-300">عرض جميع البيانات</p>
-                                    </div>
-                                    <div class="bg-gray-800 p-3 rounded-lg">
-                                        <i class="fas fa-edit text-yellow-400 mb-2"></i>
-                                        <p class="text-gray-300">تعديل كامل</p>
-                                    </div>
-                                    <div class="bg-gray-800 p-3 rounded-lg">
-                                        <i class="fas fa-users text-yellow-400 mb-2"></i>
-                                        <p class="text-gray-300">إدارة المستخدمين</p>
-                                    </div>
-                                    <div class="bg-gray-800 p-3 rounded-lg">
-                                        <i class="fas fa-cogs text-yellow-400 mb-2"></i>
-                                        <p class="text-gray-300">إعدادات النظام</p>
-                                    </div>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-                
-                document.body.appendChild(successModal);
-                document.body.style.overflow = 'hidden';
                 
                 // Store current user session
                 sessionStorage.setItem('currentUser', username);
                 sessionStorage.setItem('userRole', userInfo.role);
                 
-                // Add admin controls if founder
-                if (isFounder) {
-                    addFounderControls();
-                }
+                // Show dashboard directly
+                showDashboard(username);
                 
             } else {
                 // Failed login
@@ -1930,62 +1978,453 @@
         // Make LogoManager globally accessible
         window.LogoManager = LogoManager;
 
-        // Founder Admin Controls
-        function addFounderControls() {
-            // Create floating admin panel
-            const adminPanel = document.createElement('div');
-            adminPanel.id = 'founderPanel';
-            adminPanel.style.cssText = `
-                position: fixed;
-                top: 100px;
-                left: 20px;
-                background: linear-gradient(135deg, #FFD700, #FFA500);
-                border-radius: 15px;
-                padding: 15px;
-                z-index: 10000;
-                box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-                min-width: 200px;
-                color: #000;
-                font-weight: bold;
-            `;
+        // Dashboard Helper Functions
+        function getStatusColor(status) {
+            switch(status) {
+                case 'pending': return 'status-pending';
+                case 'progress': return 'status-progress';
+                case 'completed': return 'status-completed';
+                case 'rejected': return 'status-rejected';
+                default: return 'status-pending';
+            }
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'pending': return 'في الانتظار';
+                case 'progress': return 'قيد التنفيذ';
+                case 'completed': return 'مكتمل';
+                case 'rejected': return 'مرفوض';
+                default: return 'غير محدد';
+            }
+        }
+
+        function getProjectsSection(username) {
+            const userInfo = userRoles[username];
+            const isFounder = userInfo.role === 'founder';
             
-            adminPanel.innerHTML = `
-                <div style="text-align: center; margin-bottom: 15px;">
-                    <i class="fas fa-crown" style="color: #000; font-size: 1.5rem;"></i>
-                    <h4 style="margin: 5px 0; color: #000;">لوحة المؤسس</h4>
+            return `
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold gradient-text-green">إدارة الأعمال</h2>
+                    <button onclick="addNewProject()" class="submit-btn">
+                        <i class="fas fa-plus mr-2"></i>مشروع جديد
+                    </button>
                 </div>
                 
-                <div style="display: grid; gap: 8px;">
-                    <button onclick="showUserManagement()" style="background: rgba(0,0,0,0.1); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
-                        <i class="fas fa-users"></i> إدارة المستخدمين
+                <div class="grid gap-6">
+                    ${projects.map(project => `
+                        <div class="project-card">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2">${project.title}</h3>
+                                    <p class="text-gray-400 mb-2">العميل: ${project.client}</p>
+                                    <p class="text-gray-400 mb-2">المصمم: ${project.designer || 'غير محدد'}</p>
+                                    <p class="text-gray-400">السعر: ${project.price} ريال سعودي</p>
+                                </div>
+                                <div class="flex items-center space-x-2 space-x-reverse">
+                                    <span class="px-3 py-1 rounded-full text-sm ${getStatusColor(project.status)}">${getStatusText(project.status)}</span>
+                                    <button onclick="editProject('${project.id}')" class="text-blue-400 hover:text-blue-300">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button onclick="deleteProject('${project.id}')" class="text-red-400 hover:text-red-300">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-2">
+                                ${project.status === 'pending' ? `
+                                    <button onclick="assignDesigner('${project.id}')" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                        <i class="fas fa-user-plus mr-1"></i>تعيين مصمم
+                                    </button>
+                                ` : ''}
+                                
+                                ${project.status === 'progress' && project.designer === username ? `
+                                    <button onclick="completeProject('${project.id}')" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                                        <i class="fas fa-check mr-1"></i>إنهاء المشروع
+                                    </button>
+                                    <button onclick="sendForReview('${project.id}')" class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">
+                                        <i class="fas fa-star mr-1"></i>إرسال للتقييم
+                                    </button>
+                                ` : ''}
+                                
+                                ${project.designer && project.status !== 'completed' ? `
+                                    <button onclick="openProjectChat('${project.id}')" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
+                                        <i class="fas fa-comments mr-1"></i>الدردشة
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `).join('') || '<p class="text-gray-400 text-center py-8">لا توجد مشاريع حالياً</p>'}
+                </div>
+            `;
+        }
+
+        function getUsersSection(username) {
+            const userInfo = userRoles[username];
+            const isFounder = userInfo.role === 'founder';
+            
+            return `
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold gradient-text-green">إدارة المستخدمين</h2>
+                    <button onclick="addNewUser()" class="submit-btn">
+                        <i class="fas fa-user-plus mr-2"></i>مستخدم جديد
                     </button>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${Object.keys(users).map(user => {
+                        const info = userRoles[user];
+                        return `
+                            <div class="glass-effect p-6 rounded-2xl text-center">
+                                <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: ${info.color === 'gold' ? 'linear-gradient(45deg, #FFD700, #FFA500)' : info.color};">
+                                    <i class="fas ${info.role === 'founder' ? 'fa-crown' : info.role === 'admin' ? 'fa-user-tie' : 'fa-user'} text-2xl" style="color: ${info.color === 'gold' ? '#000' : '#fff'};"></i>
+                                </div>
+                                <h3 class="text-xl font-bold mb-2" style="color: ${info.color === 'gold' ? '#FFD700' : 'var(--primary-green)'};">${info.name}</h3>
+                                <p class="text-gray-400 mb-2">@${user}</p>
+                                <p class="text-sm text-gray-500 mb-4">${info.role === 'founder' ? 'المؤسس' : info.role === 'admin' ? 'مدير النظام' : 'مصمم'}</p>
+                                
+                                <div class="flex justify-center space-x-2 space-x-reverse">
+                                    <button onclick="editUser('${user}')" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    ${user !== '2025' ? `
+                                        <button onclick="deleteUser('${user}')" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                
+                ${isFounder ? `
+                    <div class="mt-8 glass-effect p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold mb-4 gradient-text-green">إنشاء حساب مميز</h3>
+                        <form onsubmit="createPremiumAccount(event)" class="grid md:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="form-label">اسم المستخدم</label>
+                                <input type="text" name="username" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">كلمة المرور</label>
+                                <input type="password" name="password" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">الاسم الكامل</label>
+                                <input type="text" name="fullname" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">الدور</label>
+                                <select name="role" class="form-input" required>
+                                    <option value="designer">مصمم</option>
+                                    <option value="admin">مدير</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-2">
+                                <button type="submit" class="submit-btn w-full">
+                                    <i class="fas fa-plus mr-2"></i>إنشاء الحساب
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        function getChatSection(username) {
+            const userProjects = projects.filter(p => p.designer === username || username === '2025');
+            
+            return `
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold gradient-text-green">الدردشة</h2>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="glass-effect p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold mb-4">المحادثات النشطة</h3>
+                        <div class="space-y-3">
+                            ${userProjects.map(project => `
+                                <div onclick="openChat('${project.id}')" class="p-3 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition-colors">
+                                    <h4 class="font-bold">${project.title}</h4>
+                                    <p class="text-sm text-gray-400">${project.client}</p>
+                                    <span class="text-xs text-green-400">نشط</span>
+                                </div>
+                            `).join('') || '<p class="text-gray-400 text-center py-4">لا توجد محادثات</p>'}
+                        </div>
+                    </div>
                     
-                    <button onclick="showContentEditor()" style="background: rgba(0,0,0,0.1); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
-                        <i class="fas fa-edit"></i> تحرير المحتوى
-                    </button>
+                    <div class="md:col-span-2 glass-effect p-6 rounded-2xl">
+                        <div id="chatArea">
+                            <div class="text-center py-8 text-gray-400">
+                                <i class="fas fa-comments text-4xl mb-4"></i>
+                                <p>اختر محادثة لبدء التواصل</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getStatsSection(username) {
+            if (userRoles[username].role !== 'founder') {
+                return '<p class="text-red-400 text-center py-8">غير مصرح لك بعرض هذا القسم</p>';
+            }
+            
+            return `
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold gradient-text-green">الإحصائيات المالية</h2>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="glass-effect p-6 rounded-2xl text-center">
+                        <i class="fas fa-money-bill-wave text-4xl mb-4" style="color: #FFD700;"></i>
+                        <h3 class="text-2xl font-bold mb-2">${systemStats.monthlyIncome.toLocaleString()}</h3>
+                        <p class="text-gray-400">دخل هذا الشهر (ريال)</p>
+                        <button onclick="updateIncome()" class="mt-2 px-4 py-2 bg-yellow-600 text-black rounded hover:bg-yellow-700">
+                            <i class="fas fa-plus mr-1"></i>تحديث
+                        </button>
+                    </div>
                     
-                    <button onclick="showSystemStats()" style="background: rgba(0,0,0,0.1); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
-                        <i class="fas fa-chart-bar"></i> إحصائيات النظام
-                    </button>
+                    <div class="glass-effect p-6 rounded-2xl text-center">
+                        <i class="fas fa-check-circle text-4xl mb-4 text-green-400"></i>
+                        <h3 class="text-2xl font-bold mb-2">${systemStats.completedProjects}</h3>
+                        <p class="text-gray-400">مشاريع مكتملة</p>
+                        <button onclick="updateStat('completedProjects')" class="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                            <i class="fas fa-plus mr-1"></i>زيادة
+                        </button>
+                    </div>
                     
-                    <button onclick="showLogoManager()" style="background: rgba(0,0,0,0.1); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
-                        <i class="fas fa-image"></i> إدارة الشعار
-                    </button>
+                    <div class="glass-effect p-6 rounded-2xl text-center">
+                        <i class="fas fa-clock text-4xl mb-4 text-yellow-400"></i>
+                        <h3 class="text-2xl font-bold mb-2">${systemStats.inProgressProjects}</h3>
+                        <p class="text-gray-400">قيد التنفيذ</p>
+                        <button onclick="updateStat('inProgressProjects')" class="mt-2 px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">
+                            <i class="fas fa-plus mr-1"></i>زيادة
+                        </button>
+                    </div>
                     
-                    <button onclick="exportData()" style="background: rgba(0,0,0,0.1); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
-                        <i class="fas fa-download"></i> تصدير البيانات
-                    </button>
+                    <div class="glass-effect p-6 rounded-2xl text-center">
+                        <i class="fas fa-times-circle text-4xl mb-4 text-red-400"></i>
+                        <h3 class="text-2xl font-bold mb-2">${systemStats.rejectedProjects}</h3>
+                        <p class="text-gray-400">مرفوضة</p>
+                        <button onclick="updateStat('rejectedProjects')" class="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                            <i class="fas fa-plus mr-1"></i>زيادة
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="glass-effect p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold mb-4 gradient-text-green">تحديث سريع للإحصائيات</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label">إضافة للدخل الشهري (ريال)</label>
+                            <input type="number" id="incomeAmount" class="form-input" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">نوع الإحصائية</label>
+                            <select id="statType" class="form-input">
+                                <option value="completedProjects">مشاريع مكتملة</option>
+                                <option value="inProgressProjects">قيد التنفيذ</option>
+                                <option value="rejectedProjects">مرفوضة</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4 space-x-reverse mt-4">
+                        <button onclick="addToIncome()" class="submit-btn">
+                            <i class="fas fa-money-bill-wave mr-2"></i>إضافة للدخل
+                        </button>
+                        <button onclick="incrementStat()" class="submit-btn" style="background: var(--bg-lighter); border: 2px solid var(--primary-green); color: var(--primary-green);">
+                            <i class="fas fa-plus mr-2"></i>زيادة العداد
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Dashboard System
+        function showDashboard(username) {
+            const userInfo = userRoles[username];
+            const isFounder = userInfo.role === 'founder';
+            
+            // Create dashboard overlay
+            const dashboard = document.createElement('div');
+            dashboard.id = 'dashboard';
+            dashboard.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: var(--bg-dark);
+                z-index: 10000;
+                overflow-y: auto;
+            `;
+            
+            dashboard.innerHTML = `
+                <div class="min-h-screen">
+                    <!-- Dashboard Header -->
+                    <header class="glass-effect border-b border-gray-800">
+                        <div class="container mx-auto px-6 py-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4 space-x-reverse">
+                                    <div class="custom-logo"></div>
+                                    <div>
+                                        <h1 class="text-2xl font-bold gradient-text-green">لوحة التحكم</h1>
+                                        <p class="text-sm text-gray-400">مرحباً ${userInfo.name}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4 space-x-reverse">
+                                    <div class="flex items-center space-x-2 space-x-reverse px-4 py-2 rounded-full" style="background: ${isFounder ? 'linear-gradient(45deg, #FFD700, #FFA500)' : 'var(--primary-green)'}; color: ${isFounder ? '#000' : '#fff'};">
+                                        <i class="fas ${isFounder ? 'fa-crown' : userInfo.role === 'admin' ? 'fa-user-tie' : 'fa-user'}"></i>
+                                        <span class="font-bold">${userInfo.name}</span>
+                                    </div>
+                                    <button onclick="closeDashboard()" class="text-gray-400 hover:text-white">
+                                        <i class="fas fa-times text-xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
                     
-                    <button onclick="removeFounderPanel()" style="background: rgba(255,0,0,0.2); border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #000; font-weight: bold;">
-                        <i class="fas fa-times"></i> إخفاء اللوحة
-                    </button>
+                    <div class="container mx-auto px-6 py-8">
+                        <!-- Dashboard Navigation -->
+                        <div class="flex flex-wrap gap-4 mb-8">
+                            <button onclick="showDashboardSection('overview')" class="dashboard-nav-btn active" data-section="overview">
+                                <i class="fas fa-chart-line mr-2"></i>نظرة عامة
+                            </button>
+                            <button onclick="showDashboardSection('projects')" class="dashboard-nav-btn" data-section="projects">
+                                <i class="fas fa-briefcase mr-2"></i>إدارة الأعمال
+                            </button>
+                            <button onclick="showDashboardSection('users')" class="dashboard-nav-btn" data-section="users">
+                                <i class="fas fa-users mr-2"></i>المستخدمين
+                            </button>
+                            <button onclick="showDashboardSection('chat')" class="dashboard-nav-btn" data-section="chat">
+                                <i class="fas fa-comments mr-2"></i>الدردشة
+                            </button>
+                            ${isFounder ? `
+                                <button onclick="showDashboardSection('stats')" class="dashboard-nav-btn" data-section="stats">
+                                    <i class="fas fa-chart-bar mr-2"></i>الإحصائيات المالية
+                                </button>
+                            ` : ''}
+                        </div>
+                        
+                        <!-- Dashboard Content -->
+                        <div id="dashboardContent">
+                            ${getDashboardOverview(username)}
+                        </div>
+                    </div>
                 </div>
             `;
             
-            document.body.appendChild(adminPanel);
+            document.body.appendChild(dashboard);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDashboard() {
+            const dashboard = document.getElementById('dashboard');
+            if (dashboard) {
+                dashboard.remove();
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function showDashboardSection(section) {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const content = document.getElementById('dashboardContent');
             
-            // Make panel draggable
-            makeDraggable(adminPanel);
+            // Update navigation
+            document.querySelectorAll('.dashboard-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${section}"]`).classList.add('active');
+            
+            // Show content
+            switch(section) {
+                case 'overview':
+                    content.innerHTML = getDashboardOverview(currentUser);
+                    break;
+                case 'projects':
+                    content.innerHTML = getProjectsSection(currentUser);
+                    break;
+                case 'users':
+                    content.innerHTML = getUsersSection(currentUser);
+                    break;
+                case 'chat':
+                    content.innerHTML = getChatSection(currentUser);
+                    break;
+                case 'stats':
+                    content.innerHTML = getStatsSection(currentUser);
+                    break;
+            }
+        }
+
+        function getDashboardOverview(username) {
+            const userInfo = userRoles[username];
+            const isFounder = userInfo.role === 'founder';
+            
+            return `
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="glass-effect p-6 rounded-2xl text-center">
+                        <i class="fas fa-briefcase text-4xl mb-4 gradient-text-green"></i>
+                        <h3 class="text-2xl font-bold mb-2">${projects.length}</h3>
+                        <p class="text-gray-400">إجمالي المشاريع</p>
+                    </div>
+                    
+                    <div class="glass-effect p-6 rounded-2xl text-center">
+                        <i class="fas fa-check-circle text-4xl mb-4 text-green-400"></i>
+                        <h3 class="text-2xl font-bold mb-2">${systemStats.completedProjects}</h3>
+                        <p class="text-gray-400">مشاريع مكتملة</p>
+                    </div>
+                    
+                    <div class="glass-effect p-6 rounded-2xl text-center">
+                        <i class="fas fa-clock text-4xl mb-4 text-yellow-400"></i>
+                        <h3 class="text-2xl font-bold mb-2">${systemStats.inProgressProjects}</h3>
+                        <p class="text-gray-400">قيد التنفيذ</p>
+                    </div>
+                    
+                    <div class="glass-effect p-6 rounded-2xl text-center">
+                        <i class="fas fa-times-circle text-4xl mb-4 text-red-400"></i>
+                        <h3 class="text-2xl font-bold mb-2">${systemStats.rejectedProjects}</h3>
+                        <p class="text-gray-400">مرفوضة</p>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="glass-effect p-6 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-6 gradient-text-green">المشاريع الأخيرة</h3>
+                        <div class="space-y-4">
+                            ${projects.slice(-5).map(project => `
+                                <div class="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+                                    <div>
+                                        <h4 class="font-bold">${project.title}</h4>
+                                        <p class="text-sm text-gray-400">${project.client}</p>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-sm ${getStatusColor(project.status)}">${getStatusText(project.status)}</span>
+                                </div>
+                            `).join('') || '<p class="text-gray-400 text-center py-8">لا توجد مشاريع حالياً</p>'}
+                        </div>
+                    </div>
+                    
+                    <div class="glass-effect p-6 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-6 gradient-text-green">الإجراءات السريعة</h3>
+                        <div class="space-y-4">
+                            <button onclick="addNewProject()" class="w-full submit-btn">
+                                <i class="fas fa-plus mr-2"></i>إضافة مشروع جديد
+                            </button>
+                            
+                            <button onclick="showDashboardSection('users')" class="w-full submit-btn" style="background: var(--bg-lighter); border: 2px solid var(--primary-green); color: var(--primary-green);">
+                                <i class="fas fa-users mr-2"></i>إدارة المستخدمين
+                            </button>
+                            
+                            <button onclick="showDashboardSection('chat')" class="w-full submit-btn" style="background: var(--bg-lighter); border: 2px solid var(--primary-green); color: var(--primary-green);">
+                                <i class="fas fa-comments mr-2"></i>الرسائل الجديدة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         // Make element draggable
@@ -2268,6 +2707,496 @@
             alert('تم تصدير البيانات بنجاح!');
         }
         
+        // Dashboard Action Functions
+        function addNewProject() {
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 600px;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
+                    <div class="p-8">
+                        <h2 class="text-3xl font-bold mb-6 gradient-text-green">مشروع جديد</h2>
+                        <form onsubmit="createProject(event)">
+                            <div class="form-group">
+                                <label class="form-label">عنوان المشروع</label>
+                                <input type="text" name="title" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">اسم العميل</label>
+                                <input type="text" name="client" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">السعر (ريال سعودي)</label>
+                                <input type="number" name="price" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">وصف المشروع</label>
+                                <textarea name="description" class="form-input form-textarea" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn w-full">
+                                <i class="fas fa-plus mr-2"></i>إنشاء المشروع
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function createProject(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const project = {
+                id: Date.now().toString(),
+                title: formData.get('title'),
+                client: formData.get('client'),
+                price: parseInt(formData.get('price')),
+                description: formData.get('description'),
+                status: 'pending',
+                designer: null,
+                createdAt: new Date().toISOString()
+            };
+            
+            projects.push(project);
+            event.target.closest('.modal').remove();
+            document.body.style.overflow = 'auto';
+            showDashboardSection('projects');
+            
+            alert('تم إنشاء المشروع بنجاح!');
+        }
+
+        function assignDesigner(projectId) {
+            const designers = Object.keys(users).filter(u => userRoles[u].role === 'designer' || userRoles[u].role === 'admin');
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 400px;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold mb-6 gradient-text-green">تعيين مصمم</h2>
+                        <form onsubmit="assignProjectDesigner(event, '${projectId}')">
+                            <div class="form-group">
+                                <label class="form-label">اختر المصمم</label>
+                                <select name="designer" class="form-input" required>
+                                    <option value="">اختر مصمم</option>
+                                    ${designers.map(d => `<option value="${d}">${userRoles[d].name}</option>`).join('')}
+                                </select>
+                            </div>
+                            <button type="submit" class="submit-btn w-full">
+                                <i class="fas fa-user-plus mr-2"></i>تعيين المصمم
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function assignProjectDesigner(event, projectId) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const designer = formData.get('designer');
+            
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                project.designer = designer;
+                project.status = 'progress';
+                
+                // Initialize chat for this project
+                if (!clientMessages[projectId]) {
+                    clientMessages[projectId] = [];
+                }
+            }
+            
+            event.target.closest('.modal').remove();
+            document.body.style.overflow = 'auto';
+            showDashboardSection('projects');
+            
+            alert('تم تعيين المصمم بنجاح!');
+        }
+
+        function completeProject(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                project.status = 'completed';
+                systemStats.completedProjects++;
+                systemStats.inProgressProjects = Math.max(0, systemStats.inProgressProjects - 1);
+                systemStats.monthlyIncome += project.price;
+            }
+            showDashboardSection('projects');
+            alert('تم إنهاء المشروع بنجاح!');
+        }
+
+        function sendForReview(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                // Add review message to chat
+                if (!clientMessages[projectId]) {
+                    clientMessages[projectId] = [];
+                }
+                clientMessages[projectId].push({
+                    sender: project.designer,
+                    message: 'تم إرسال المشروع للتقييم. يرجى مراجعة العمل وإبداء رأيكم.',
+                    timestamp: new Date().toISOString(),
+                    type: 'review'
+                });
+            }
+            alert('تم إرسال المشروع للتقييم!');
+        }
+
+        function openProjectChat(projectId) {
+            showDashboardSection('chat');
+            setTimeout(() => openChat(projectId), 100);
+        }
+
+        function openChat(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (!project) return;
+            
+            const chatArea = document.getElementById('chatArea');
+            const messages = clientMessages[projectId] || [];
+            const currentUser = sessionStorage.getItem('currentUser');
+            
+            chatArea.innerHTML = `
+                <div class="border-b border-gray-700 pb-4 mb-4">
+                    <h3 class="text-xl font-bold">${project.title}</h3>
+                    <p class="text-gray-400">العميل: ${project.client} | المصمم: ${userRoles[project.designer]?.name || 'غير محدد'}</p>
+                </div>
+                
+                <div id="messagesContainer" class="h-64 overflow-y-auto mb-4 space-y-3">
+                    ${messages.map(msg => `
+                        <div class="chat-message ${msg.sender === currentUser ? '' : 'designer'}">
+                            <div class="flex justify-between items-start mb-2">
+                                <strong>${userRoles[msg.sender]?.name || msg.sender}</strong>
+                                <span class="text-xs text-gray-500">${new Date(msg.timestamp).toLocaleString('ar-SA')}</span>
+                            </div>
+                            <p>${msg.message}</p>
+                            ${msg.type === 'review' ? '<span class="text-yellow-400 text-sm"><i class="fas fa-star mr-1"></i>طلب تقييم</span>' : ''}
+                        </div>
+                    `).join('') || '<p class="text-gray-400 text-center py-4">لا توجد رسائل بعد</p>'}
+                </div>
+                
+                <div class="flex space-x-2 space-x-reverse">
+                    <textarea id="messageInput" class="chat-input flex-1" placeholder="اكتب رسالتك هنا..." rows="2"></textarea>
+                    <button onclick="sendMessage('${projectId}')" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                ${project.designer === currentUser && project.status === 'progress' ? `
+                    <div class="flex space-x-2 space-x-reverse mt-4">
+                        <button onclick="sendForReview('${projectId}')" class="submit-btn">
+                            <i class="fas fa-star mr-2"></i>إرسال للتقييم
+                        </button>
+                        <button onclick="completeProject('${projectId}')" class="submit-btn" style="background: #28a745;">
+                            <i class="fas fa-check mr-2"></i>إنهاء المشروع
+                        </button>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        function sendMessage(projectId) {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            const currentUser = sessionStorage.getItem('currentUser');
+            
+            if (!clientMessages[projectId]) {
+                clientMessages[projectId] = [];
+            }
+            
+            clientMessages[projectId].push({
+                sender: currentUser,
+                message: message,
+                timestamp: new Date().toISOString(),
+                type: 'message'
+            });
+            
+            messageInput.value = '';
+            openChat(projectId); // Refresh chat
+        }
+
+        function createPremiumAccount(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const username = formData.get('username');
+            const password = formData.get('password');
+            const fullname = formData.get('fullname');
+            const role = formData.get('role');
+            
+            if (users[username]) {
+                alert('اسم المستخدم موجود بالفعل!');
+                return;
+            }
+            
+            users[username] = password;
+            userRoles[username] = {
+                role: role,
+                name: fullname,
+                permissions: role === 'admin' ? ['view_all', 'edit_content', 'manage_projects'] : ['view_projects', 'edit_own'],
+                color: 'var(--primary-green)'
+            };
+            
+            event.target.reset();
+            showDashboardSection('users');
+            alert('تم إنشاء الحساب بنجاح!');
+        }
+
+        function addToIncome() {
+            const amount = parseInt(document.getElementById('incomeAmount').value) || 0;
+            if (amount > 0) {
+                systemStats.monthlyIncome += amount;
+                document.getElementById('incomeAmount').value = '';
+                showDashboardSection('stats');
+                alert(`تم إضافة ${amount.toLocaleString()} ريال للدخل الشهري!`);
+            }
+        }
+
+        function incrementStat() {
+            const statType = document.getElementById('statType').value;
+            systemStats[statType]++;
+            showDashboardSection('stats');
+            alert('تم زيادة العداد بنجاح!');
+        }
+
+        function updateStat(statType) {
+            systemStats[statType]++;
+            showDashboardSection('stats');
+        }
+
+        function updateIncome() {
+            const amount = prompt('أدخل المبلغ المراد إضافته (ريال):');
+            if (amount && !isNaN(amount)) {
+                systemStats.monthlyIncome += parseInt(amount);
+                showDashboardSection('stats');
+                alert(`تم إضافة ${parseInt(amount).toLocaleString()} ريال!`);
+            }
+        }
+
+        function editProject(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (!project) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 600px;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
+                    <div class="p-8">
+                        <h2 class="text-3xl font-bold mb-6 gradient-text-green">تعديل المشروع</h2>
+                        <form onsubmit="updateProject(event, '${projectId}')">
+                            <div class="form-group">
+                                <label class="form-label">عنوان المشروع</label>
+                                <input type="text" name="title" class="form-input" value="${project.title}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">اسم العميل</label>
+                                <input type="text" name="client" class="form-input" value="${project.client}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">السعر (ريال سعودي)</label>
+                                <input type="number" name="price" class="form-input" value="${project.price}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">الحالة</label>
+                                <select name="status" class="form-input" required>
+                                    <option value="pending" ${project.status === 'pending' ? 'selected' : ''}>في الانتظار</option>
+                                    <option value="progress" ${project.status === 'progress' ? 'selected' : ''}>قيد التنفيذ</option>
+                                    <option value="completed" ${project.status === 'completed' ? 'selected' : ''}>مكتمل</option>
+                                    <option value="rejected" ${project.status === 'rejected' ? 'selected' : ''}>مرفوض</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="submit-btn w-full">
+                                <i class="fas fa-save mr-2"></i>حفظ التغييرات
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateProject(event, projectId) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const project = projects.find(p => p.id === projectId);
+            
+            if (project) {
+                project.title = formData.get('title');
+                project.client = formData.get('client');
+                project.price = parseInt(formData.get('price'));
+                project.status = formData.get('status');
+            }
+            
+            event.target.closest('.modal').remove();
+            document.body.style.overflow = 'auto';
+            showDashboardSection('projects');
+            alert('تم تحديث المشروع بنجاح!');
+        }
+
+        function deleteProject(projectId) {
+            if (confirm('هل أنت متأكد من حذف هذا المشروع؟')) {
+                const index = projects.findIndex(p => p.id === projectId);
+                if (index > -1) {
+                    projects.splice(index, 1);
+                    delete clientMessages[projectId];
+                    showDashboardSection('projects');
+                    alert('تم حذف المشروع بنجاح!');
+                }
+            }
+        }
+
+        function addNewUser() {
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 500px;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
+                    <div class="p-8">
+                        <h2 class="text-3xl font-bold mb-6 gradient-text-green">مستخدم جديد</h2>
+                        <form onsubmit="createNewUser(event)">
+                            <div class="form-group">
+                                <label class="form-label">اسم المستخدم</label>
+                                <input type="text" name="username" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">كلمة المرور</label>
+                                <input type="password" name="password" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">الاسم الكامل</label>
+                                <input type="text" name="fullname" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">الدور</label>
+                                <select name="role" class="form-input" required>
+                                    <option value="designer">مصمم</option>
+                                    <option value="admin">مدير</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="submit-btn w-full">
+                                <i class="fas fa-user-plus mr-2"></i>إنشاء المستخدم
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function createNewUser(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const username = formData.get('username');
+            const password = formData.get('password');
+            const fullname = formData.get('fullname');
+            const role = formData.get('role');
+            
+            if (users[username]) {
+                alert('اسم المستخدم موجود بالفعل!');
+                return;
+            }
+            
+            users[username] = password;
+            userRoles[username] = {
+                role: role,
+                name: fullname,
+                permissions: role === 'admin' ? ['view_all', 'edit_content', 'manage_projects'] : ['view_projects', 'edit_own'],
+                color: 'var(--primary-green)'
+            };
+            
+            event.target.closest('.modal').remove();
+            document.body.style.overflow = 'auto';
+            showDashboardSection('users');
+            alert('تم إنشاء المستخدم بنجاح!');
+        }
+
+        function editUser(username) {
+            const user = userRoles[username];
+            if (!user) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 500px;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';">×</button>
+                    <div class="p-8">
+                        <h2 class="text-3xl font-bold mb-6 gradient-text-green">تعديل المستخدم</h2>
+                        <form onsubmit="updateUser(event, '${username}')">
+                            <div class="form-group">
+                                <label class="form-label">اسم المستخدم</label>
+                                <input type="text" name="username" class="form-input" value="${username}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">كلمة المرور الجديدة (اتركها فارغة للاحتفاظ بالحالية)</label>
+                                <input type="password" name="password" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">الاسم الكامل</label>
+                                <input type="text" name="fullname" class="form-input" value="${user.name}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">الدور</label>
+                                <select name="role" class="form-input" required ${username === '2025' ? 'disabled' : ''}>
+                                    <option value="founder" ${user.role === 'founder' ? 'selected' : ''}>المؤسس</option>
+                                    <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>مدير</option>
+                                    <option value="designer" ${user.role === 'designer' ? 'selected' : ''}>مصمم</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="submit-btn w-full">
+                                <i class="fas fa-save mr-2"></i>حفظ التغييرات
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateUser(event, username) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const password = formData.get('password');
+            const fullname = formData.get('fullname');
+            const role = formData.get('role');
+            
+            if (password) {
+                users[username] = password;
+            }
+            
+            userRoles[username].name = fullname;
+            if (username !== '2025') {
+                userRoles[username].role = role;
+            }
+            
+            event.target.closest('.modal').remove();
+            document.body.style.overflow = 'auto';
+            showDashboardSection('users');
+            alert('تم تحديث المستخدم بنجاح!');
+        }
+
+        function deleteUser(username) {
+            if (username === '2025') {
+                alert('لا يمكن حذف حساب المؤسس!');
+                return;
+            }
+            
+            if (confirm(`هل أنت متأكد من حذف المستخدم ${userRoles[username].name}؟`)) {
+                delete users[username];
+                delete userRoles[username];
+                showDashboardSection('users');
+                alert('تم حذف المستخدم بنجاح!');
+            }
+        }
+
         // Initialize logo on page load
         document.addEventListener('DOMContentLoaded', function() {
             LogoManager.updateLogo(LogoManager.config.url, LogoManager.config.text);
@@ -2296,5 +3225,5 @@
             observer.observe(el);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a96aec135558fa',t:'MTc1NDQyOTY1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a97f80147fea75',t:'MTc1NDQzMDUwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
