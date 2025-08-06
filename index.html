@@ -2,15 +2,18 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>iCore Studio - استوديو التصميم الإبداعي</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Kufam:wght@400;500;600;700;800;900&display=swap');
         
         * {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Kufam', sans-serif;
         }
         
         :root {
@@ -28,6 +31,8 @@
             background-color: var(--bg-dark);
             color: var(--text-light);
             overflow-x: hidden;
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
         }
         
         .gradient-green {
@@ -120,7 +125,7 @@
         
         /* Global Logo Configuration */
         :root {
-            --logo-url: url('https://up6.cc/2025/08/175443183581884.png');
+            --logo-url: url('https://up6.cc/2025/08/17259901671.png');
             --logo-text: 'iC';
             --logo-bg: linear-gradient(45deg, var(--primary-green), var(--light-green));
         }
@@ -282,9 +287,15 @@
         
         .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
             margin: 50px 0;
+        }
+        
+        @supports (display: grid) {
+            .portfolio-grid {
+                grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+            }
         }
         
         .portfolio-item {
@@ -762,25 +773,261 @@
             left: 100%;
         }
         
-        @media (max-width: 768px) {
+        /* Mobile First Responsive Design */
+        @media (max-width: 480px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+                line-height: 1.2;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .custom-logo {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .custom-logo.large {
+                width: 80px;
+                height: 80px;
+            }
+            
             .portfolio-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
             
             .work-gallery {
                 grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .service-card, .team-card, .project-card {
+                padding: 20px;
+            }
+            
+            .service-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .team-avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+            
+            .stats-counter {
+                font-size: 2rem;
             }
             
             .floating-nav {
                 display: none;
             }
             
-            .hero-title {
+            .back-to-top {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 1.2rem;
+            }
+            
+            .modal-content {
+                max-width: 95%;
+                margin: 10px;
+            }
+            
+            .contact-form {
+                padding: 20px;
+            }
+            
+            .form-input {
+                padding: 12px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .submit-btn {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+            
+            .section-title {
                 font-size: 2.5rem;
             }
             
+            .dashboard-nav-btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (min-width: 481px) and (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
             .hero-subtitle {
-                font-size: 1.2rem;
+                font-size: 1.3rem;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
+            
+            .work-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .floating-nav {
+                display: none;
+            }
+            
+            .custom-logo.large {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .modal-content {
+                max-width: 90%;
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+            
+            .work-gallery {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .hero-title {
+                font-size: 4rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (min-width: 1025px) and (max-width: 1440px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .work-gallery {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (min-width: 1441px) {
+            .container {
+                max-width: 1400px;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .hero-title {
+                font-size: 6rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Landscape orientation for mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .custom-logo.large {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .floating-animation {
+                animation: none;
+            }
+        }
+        
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .custom-logo {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+            }
+        }
+        
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .hover-glow:hover {
+                transform: none;
+                box-shadow: none;
+            }
+            
+            .portfolio-item:hover,
+            .service-card:hover,
+            .team-card:hover {
+                transform: none;
+            }
+            
+            .submit-btn:hover {
+                transform: none;
+            }
+            
+            /* Larger touch targets */
+            .nav-dot {
+                width: 16px;
+                height: 16px;
+                margin: 20px 0;
+            }
+            
+            .modal-close,
+            .fullscreen-close {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .loading-screen,
+            .scroll-indicator,
+            .floating-nav,
+            .back-to-top,
+            .modal,
+            .fullscreen-image {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .gradient-text-green {
+                color: #00ff88 !important;
+                -webkit-text-fill-color: #00ff88 !important;
             }
         }
         
@@ -845,8 +1092,8 @@
     </div>
     
     <!-- Header -->
-    <header class="fixed top-0 w-full z-50 glass-effect">
-        <nav class="container mx-auto px-6 py-4">
+    <header class="fixed top-0 w-full z-50 glass-effect" style="padding-top: env(safe-area-inset-top);">
+        <nav class="container mx-auto px-6 py-2">
             <div class="flex items-center justify-between">
                 <a href="#hero" class="flex items-center space-x-4 space-x-reverse hover:scale-105 transition-transform duration-300">
                     <div class="custom-logo"></div>
@@ -872,7 +1119,7 @@
             </div>
             
             <!-- Mobile Menu -->
-            <div id="mobileMenu" class="md:hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-95 backdrop-blur-lg transform translate-x-full transition-transform duration-300 z-50">
+            <div id="mobileMenu" class="md:hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-95 backdrop-blur-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
                 <div class="flex flex-col h-full">
                     <div class="flex items-center justify-between p-6 border-b border-gray-800">
                         <div class="flex items-center space-x-4 space-x-reverse">
@@ -1255,7 +1502,7 @@
                     <h3 class="text-2xl font-bold mb-2 gradient-text-green">iTrx | مجييد</h3>
                     <p class="text-green-400 mb-4">المدير الإبداعي</p>
                     <p class="text-gray-300 mb-6">
-                        خبرة 4 سنوات في التصميم الجرافيكي والهوية البصرية، متخصص في إنشاء علامات تجارية مميزة
+                        خبرة 8 سنوات في التصميم الجرافيكي والهوية البصرية، متخصص في إنشاء علامات تجارية مميزة
                     </p>
                     <div class="flex justify-center space-x-4 space-x-reverse">
                         <!-- رابط لينكد إن للمصمم الأول -->
@@ -1931,7 +2178,7 @@
         const LogoManager = {
             // Current logo configuration
             config: {
-                url: 'https://up6.cc/2025/08/175443183581884.png',
+                url: 'https://up6.cc/2025/08/17259901671.png',
                 text: 'iC',
                 background: 'linear-gradient(45deg, var(--primary-green), var(--light-green))'
             },
@@ -1959,7 +2206,7 @@
             // Reset to default logo
             resetLogo: function() {
                 this.updateLogo(
-                    'https://up6.cc/2025/08/175443183581884.png',
+                    'https://up6.cc/2025/08/17259901671.png',
                     'iC',
                     'linear-gradient(45deg, var(--primary-green), var(--light-green))'
                 );
@@ -3226,5 +3473,5 @@
             observer.observe(el);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a9997414767884',t:'MTc1NDQzMTU2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96adc58a95a0f445',t:'MTc1NDQ3NTMxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
